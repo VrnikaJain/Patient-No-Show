@@ -77,7 +77,7 @@ if selected_analysis == "Gender and No Show Rate":
     ax.set_xlabel('Gender')
     ax.set_ylabel('Percentage of No Shows')
     ax.set_title('No Show Percentage by Gender')
-    ax.set_xticklabels(no_show_percentage_by_gender.index, rotation=45)
+    ax.set_xticklabels(no_show_percentage_by_gender.index)
     st.pyplot(fig)
 
 
@@ -100,7 +100,7 @@ elif selected_analysis == "Age and No Show Rate":
     ax.set_ylabel('Age Group')
     ax.set_title('No Show Percentage by Age Group')
     ax.set_ylim(bottom=0)
-    ax.set_xticklabels(no_show_percentage_by_age_group.index, rotation=45)
+    ax.set_xticklabels(no_show_percentage_by_age_group.index, rotation=90, fontsize=6)
     st.pyplot(fig)
 
 
@@ -129,8 +129,8 @@ elif selected_analysis == "No Shows in a particular Doctor Neighbor":
     ax.set_xlabel('Doctor Neighbor')
     ax.set_ylabel('Percentage of No Shows')
     ax.set_title('No Show Percentage by Doctor Neighbor')
-    ax.tick_params(axis='x', rotation=90)  # Rotate x-axis labels for better readability
-    ax.set_yticklabels(no_show_percentage_by_doctor_neighbor.index, rotation=45)
+    ax.tick_params(axis='x')  # Rotate x-axis labels for better readability
+    ax.set_yticklabels(no_show_percentage_by_doctor_neighbor.index)
     st.pyplot(fig)
 
 
@@ -166,7 +166,7 @@ elif selected_analysis == "Month, Date and Day wise Rate of No Show":
     # Plot No Show Rates by Scheduled Date
     st.write("No Show Rates by Scheduled Date:")
     fig, ax = plt.subplots()
-    no_show_percentage_by_date['No Show Percentage'].plot(kind='line', marker='o', ax=ax, palette=bar_palette)
+    no_show_percentage_by_date['No Show Percentage'].plot(kind='line', marker='o', ax=ax, color=bar_palette)
     ax.set_xlabel('Scheduled Date')
     ax.set_ylabel('Percentage of No Shows')
     ax.set_title('No Show Rates by Scheduled Date')
@@ -182,11 +182,11 @@ elif selected_analysis == "No Show after sending SMS":
 
     # Plot the relationship between SMS received and no-show
     fig, ax = plt.subplots(figsize=(8, 6))
-    sms_no_show_count.plot(kind='bar', ax=ax, palette=bar_palette)
+    sms_no_show_count.plot(kind='bar', ax=ax, color=bar_palette)
     ax.set_xlabel('No-show')
     ax.set_ylabel('Count of SMS Received')
     ax.set_title('No Show after sending SMS')
-    ax.set_yticklabels(sms_no_show_count.index, rotation=45)
+    ax.set_yticklabels(sms_no_show_count.index)
     st.pyplot(fig)
 
 
@@ -198,11 +198,11 @@ elif selected_analysis == "Rate of No Show after granting a scholarship":
 
     # Plot the relationship between scholarship and no-show
     fig, ax = plt.subplots(figsize=(8, 6))
-    scholarship_no_show_count.plot(kind='bar', ax=ax, palette=bar_palette)
+    scholarship_no_show_count.plot(kind='bar', ax=ax, color=bar_palette)
     ax.set_xlabel('No-show')
     ax.set_ylabel('Count')
     ax.set_title('Rate of No Show after granting a scholarship')
-    ax.set_yticklabels(scholarship_no_show_count.index, rotation=45)
+    ax.set_yticklabels(scholarship_no_show_count.index)
     st.pyplot(fig)
 
 
@@ -265,7 +265,7 @@ elif selected_analysis == "Appointment day difference VS No Show":
     ax.set_xlabel('Appointment Day - Scheduled Day Difference (Days)')
     ax.set_ylabel('No Show')
     ax.set_yticks([0, 1])  # Set y-ticks to correspond to the 'No-show' values
-    ax.set_yticklabels([no_show_mapping[val] for val in ax.get_yticks()], rotation=45)
+    ax.set_yticklabels([no_show_mapping[val] for val in ax.get_yticks()])
     ax.set_title('Appointment day difference VS No Show')
     st.pyplot(fig)
 
