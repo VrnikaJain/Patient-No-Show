@@ -182,7 +182,10 @@ elif selected_analysis == "No Show after sending SMS":
 
     # Plot the relationship between SMS received and no-show
     fig, ax = plt.subplots(figsize=(8, 6))
-    sms_no_show_count.plot(kind='bar', ax=ax, color=bar_palette)
+    sms_no_show_count.plot(kind='bar', ax=ax, color=['blue', 'orange'])
+    for i, (index, row) in enumerate(sms_no_show_count.iterrows()):
+        for j, value in enumerate(row):
+            ax.text(i, value, str(value), ha='center', va='bottom', fontsize=4, color='grey')
     ax.set_xlabel('No-show')
     ax.set_ylabel('Count of SMS Received')
     ax.set_title('No Show after sending SMS')
