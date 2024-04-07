@@ -109,12 +109,13 @@ elif selected_analysis == "Age and No Show Rate":
     ax.set_ylim(bottom=0)
     ax.set_xticklabels(no_show_percentage_by_age_group.index, rotation=90, fontsize=4)
     ax.set_yticklabels([]) 
+    ax.tick_params(axis='x', labelsize=8) 
     
     # Ensure no_show_percentage_by_age_group is a DataFrame before iterating over rows
     if isinstance(no_show_percentage_by_age_group, pd.DataFrame):
         for i, (index, row) in enumerate(no_show_percentage_by_age_group.iterrows()):
             for j, value in enumerate(row):
-                ax.text(value, i, f"{value:.2f}%", ha='center', va='center', fontsize=12, color='grey')
+                ax.text(value, i, f"{value:.2f}%", ha='center', va='center', fontsize=4, color='grey')
     
     st.pyplot(fig)
 
