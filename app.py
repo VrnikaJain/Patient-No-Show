@@ -74,6 +74,9 @@ if selected_analysis == "Gender and No Show Rate":
     # Plot No Show Rates by Gender
     fig, ax = plt.subplots()
     sns.barplot(x=no_show_percentage_by_gender.index, y=no_show_percentage_by_gender.values, ax=ax, palette=bar_palette)
+    for i, (index, row) in enumerate(no_show_percentage_by_gender.iterrows()):
+        for j, value in enumerate(row):
+            ax.text(i, value, str(value), ha='center', va='bottom', fontsize=10, color='grey')
     ax.set_xlabel('Gender')
     ax.set_ylabel('Percentage of No Shows')
     ax.set_title('No Show Percentage by Gender')
@@ -96,11 +99,13 @@ elif selected_analysis == "Age and No Show Rate":
     # Plot No Show Rates by Age Group
     fig, ax = plt.subplots()
     sns.barplot(x=no_show_percentage_by_age_group.index, y=no_show_percentage_by_age_group.values, ax=ax, palette=bar_palette)
-    ax.set_xlabel('Percentage of No Shows')
-    ax.set_ylabel('Age Group')
+    for i, (index, value) in enumerate(no_show_percentage_by_age_group.items()):
+        ax.text(i, value, f'{value:.2f}%', ha='center', va='bottom', fontsize=10, color='grey')
+    ax.set_ylabel('Percentage of No Shows')
+    ax.set_xlabel('Age Group')
     ax.set_title('No Show Percentage by Age Group')
-    ax.set_ylim(bottom=0)
-    ax.set_xticklabels(no_show_percentage_by_age_group.index, rotation=90, fontsize=6)
+    ax.set_xlim(left=0)
+    ax.set_yticklabels(no_show_percentage_by_age_group.values, rotation=0, fontsize=8)
     st.pyplot(fig)
 
 
@@ -126,6 +131,9 @@ elif selected_analysis == "No Shows in a particular Doctor Neighbor":
     # Plot No Show Rates by Doctor Neighbor
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.barplot(x=no_show_percentage_by_doctor_neighbor.index, y=no_show_percentage_by_doctor_neighbor.values, ax=ax, palette=bar_palette)
+    for i, (index, row) in enumerate(no_show_percentage_by_doctor_neighbor.iterrows()):
+        for j, value in enumerate(row):
+            ax.text(i, value, str(value), ha='center', va='bottom', fontsize=10, color='grey')
     ax.set_xlabel('Doctor Neighbor')
     ax.set_ylabel('Percentage of No Shows')
     ax.set_title('No Show Percentage by Doctor Neighbor')
@@ -182,12 +190,12 @@ elif selected_analysis == "No Show after sending SMS":
 
     # Plot the relationship between SMS received and no-show
     fig, ax = plt.subplots(figsize=(8, 6))
-    sms_no_show_count.plot(kind='bar', ax=ax, color=['blue', 'orange'])
+    sms_no_show_count.plot(kind='bar', ax=ax, color=['Cornflower Blue', 'PaleGreen'])
     for i, (index, row) in enumerate(sms_no_show_count.iterrows()):
         for j, value in enumerate(row):
-            ax.text(i, value, str(value), ha='center', va='bottom', fontsize=4, color='grey')
+            ax.text(i, value, str(value), ha='center', va='bottom', fontsize=10, color='grey')
     ax.set_xlabel('No-show')
-    ax.set_ylabel('Count of SMS Received')
+    #ax.set_ylabel('Count of SMS Received')
     ax.set_title('No Show after sending SMS')
     ax.set_yticklabels(sms_no_show_count.index)
     st.pyplot(fig)
@@ -201,7 +209,10 @@ elif selected_analysis == "Rate of No Show after granting a scholarship":
 
     # Plot the relationship between scholarship and no-show
     fig, ax = plt.subplots(figsize=(8, 6))
-    scholarship_no_show_count.plot(kind='bar', ax=ax, color=bar_palette)
+    scholarship_no_show_count.plot(kind='bar', ax=ax, color=['Cornflower Blue', 'PaleGreen'])
+    for i, (index, row) in enumerate(scholarship_no_show_count.iterrows()):
+        for j, value in enumerate(row):
+            ax.text(i, value, str(value), ha='center', va='bottom', fontsize=10, color='grey')
     ax.set_xlabel('No-show')
     ax.set_ylabel('Count')
     ax.set_title('Rate of No Show after granting a scholarship')
@@ -226,7 +237,7 @@ elif selected_analysis == "Diseases and Their Relationship to No Shows":
 
     # Plot the presence of diseases for each patient
     fig, ax = plt.subplots(figsize=(10, 6))
-    diseases_count_df.plot(kind='bar', stacked=True, ax=ax, palette=bar_palette)
+    diseases_count_df.plot(kind='bar', stacked=True, ax=ax, color=['Cornflower Blue', 'PaleGreen'])
     ax.set_xlabel('Patient ID')
     ax.set_ylabel('Count of No Show')
     ax.set_title('Diseases and Their Relationship to No Shows')
@@ -265,11 +276,15 @@ elif selected_analysis == "Appointment day difference VS No Show":
     # Plot the relationship between the difference and no-show
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.lineplot(data=filtered_df, x='Appointment_Scheduled_Difference', y='No-show', estimator=None, ax=ax, palette=bar_palette)
+    
     ax.set_xlabel('Appointment Day - Scheduled Day Difference (Days)')
     ax.set_ylabel('No Show')
     ax.set_yticks([0, 1])  # Set y-ticks to correspond to the 'No-show' values
     ax.set_yticklabels([no_show_mapping[val] for val in ax.get_yticks()])
     ax.set_title('Appointment day difference VS No Show')
+    # Add labels to specific points on the plot
+    for i, row in filtered_df.iterrows():
+        ax.text(row['Appointment_Scheduled_Difference'], 0 if row['No-show'] == 'No' else 1, row['No-show'], color='black', ha='center', va='bottom')
     st.pyplot(fig)
 
 
