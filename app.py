@@ -110,9 +110,10 @@ elif selected_analysis == "Age and No Show Rate":
     ax.set_xticklabels(no_show_percentage_by_age_group.index, rotation=90, fontsize=4)
     ax.set_yticklabels([]) 
     
-    # Ensure no_show_percentage_by_age_group is a DataFrame before iterating over rows    
+    # Display percentage values on the bars with proper alignment
     for i, value in enumerate(no_show_percentage_by_age_group.values):
-        ax.text(value, i, f"{value:.2f}%", ha='center', va='center', fontsize=4, color='grey')
+        bar_height = ax.patches[i].get_height()
+        ax.text(value, ax.patches[i].get_y() + bar_height / 2, f"{value:.2f}%", ha='center', va='center', fontsize=4, color='grey')
         
     st.pyplot(fig)
 
