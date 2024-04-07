@@ -114,7 +114,7 @@ elif selected_analysis == "Age and No Show Rate":
     if isinstance(no_show_percentage_by_age_group, pd.DataFrame):
         for i, (index, row) in enumerate(no_show_percentage_by_age_group.iterrows()):
             for j, value in enumerate(row):
-                ax.text(value, i, f"{value:.2f}%", ha='center', va='center', fontsize=4, color='grey')
+                ax.text(value, i, f"{value:.2f}%", ha='center', va='center', fontsize=12, color='grey')
     
     st.pyplot(fig)
 
