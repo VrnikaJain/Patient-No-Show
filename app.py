@@ -12,6 +12,7 @@ data=load_data()
 st.title("PATIENT NO-SHOW ANALYSIS")
 
 bar_palette = "Spectral"
+bar_palette2 = ["#F0A56A", "#F06A84", "#D46AF0", "#6ABCF0", "#6AF0AC", "#F0FF1F"] 
 #Make choice between following options
 st.sidebar.header('Choose the interest option: ')
 
@@ -173,7 +174,7 @@ elif selected_analysis == "Month, Date and Day wise Rate of No Show":
     # Plot No Show Rates by Scheduled Month
     st.write("No Show Rates by Scheduled Month:")
     fig, ax = plt.subplots()
-    no_show_percentage_by_month['No Show Percentage'].plot(kind='line', marker='o', ax=ax, color=bar_palette)
+    no_show_percentage_by_month['No Show Percentage'].plot(kind='line', marker='o', ax=ax, color=bar_palette2)
     ax.set_xlabel('Scheduled Month')
     ax.set_ylabel('Percentage of No Shows')
     ax.set_title('No Show Rates by Scheduled Month')
@@ -188,7 +189,7 @@ elif selected_analysis == "Month, Date and Day wise Rate of No Show":
     # Plot No Show Rates by Scheduled Date
     st.write("No Show Rates by Scheduled Date:")
     fig, ax = plt.subplots()
-    no_show_percentage_by_date['No Show Percentage'].plot(kind='line', marker='o', ax=ax, color=bar_palette)
+    no_show_percentage_by_date['No Show Percentage'].plot(kind='line', marker='o', ax=ax, color=bar_palette2)
     ax.set_xlabel('Scheduled Date')
     ax.set_ylabel('Percentage of No Shows')
     ax.set_title('No Show Rates by Scheduled Date')
