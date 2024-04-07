@@ -141,7 +141,7 @@ elif selected_analysis == "No Shows in a particular Doctor Neighbor":
 
     # Plot No Show Rates by Doctor Neighbor
     fig, ax = plt.subplots(figsize=(10, 6))
-    sns.barplot(x=no_show_percentage_by_doctor_neighbor.values, y=no_show_percentage_by_doctor_neighbor.index, ax=ax, palette=bar_palette)
+    sns.barplot(x=no_show_percentage_by_doctor_neighbor.values, y=no_show_percentage_by_doctor_neighbor.index, ax=ax, color="#BCF06A")
 
     ax.set_xlabel('Percentage of No Shows')
     ax.set_ylabel('Doctor Neighbor')
