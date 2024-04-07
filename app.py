@@ -78,7 +78,6 @@ if selected_analysis == "Gender and No Show Rate":
     ax.set_xlabel('Gender')
     ax.set_ylabel('Percentage of No Shows')
     ax.set_title('No Show Percentage by Gender')
-    ax.set_xlim(bottom=0)
     ax.set_xticklabels(no_show_percentage_by_gender.index, fontsize=8)
     
     # Adding percentage labels to the bars
