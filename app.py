@@ -11,6 +11,7 @@ data=load_data()
 
 st.title("PATIENT NO-SHOW ANALYSIS")
 
+bar_palette = "Spectral"
 #Make choice between following options
 st.sidebar.header('Choose the interest option: ')
 
@@ -56,13 +57,8 @@ elif selected_analysis == "Age and No Show Rate":
 elif selected_analysis == "No Shows in a particular Doctor Neighbor" and doctor_neighbor_filter != "All":
     filtered_df = filtered_df[filtered_df['Neighbourhood'] == doctor_neighbor_filter]
 
-'''
-1. Analysis: Gender and No Show Rate
-2. Analysis: Age and No Show Rate
-3. Analysis: No Shows in a particular Doctor Neighbor
-4. Analysis: Month, Date and Day wise Rate of No Show
-'''
 
+#Selection and filtering
 if selected_analysis == "Gender and No Show Rate":
     st.subheader('Gender and No Show Rate')
 
@@ -77,11 +73,13 @@ if selected_analysis == "Gender and No Show Rate":
 
     # Plot No Show Rates by Gender
     fig, ax = plt.subplots()
-    sns.barplot(x=no_show_percentage_by_gender.index, y=no_show_percentage_by_gender.values, ax=ax)
+    sns.barplot(x=no_show_percentage_by_gender.index, y=no_show_percentage_by_gender.values, ax=ax, palette=bar_palette)
     ax.set_xlabel('Gender')
     ax.set_ylabel('Percentage of No Shows')
     ax.set_title('No Show Percentage by Gender')
+    ax.set_xticklabels(no_show_percentage_by_gender.index)
     st.pyplot(fig)
+
 
 elif selected_analysis == "Age and No Show Rate":
     st.subheader('Age and No Show Rate')
@@ -97,17 +95,20 @@ elif selected_analysis == "Age and No Show Rate":
 
     # Plot No Show Rates by Age Group
     fig, ax = plt.subplots()
-    sns.barplot(x=no_show_percentage_by_age_group.values, y=no_show_percentage_by_age_group.index, ax=ax)
+    sns.barplot(x=no_show_percentage_by_age_group.index, y=no_show_percentage_by_age_group.values, ax=ax, palette=bar_palette)
     ax.set_xlabel('Percentage of No Shows')
     ax.set_ylabel('Age Group')
     ax.set_title('No Show Percentage by Age Group')
+    ax.set_ylim(bottom=0)
+    ax.set_xticklabels(no_show_percentage_by_age_group.index)
     st.pyplot(fig)
+
 
 elif selected_analysis == "No Shows in a particular Doctor Neighbor":
     st.subheader('No Shows in a particular Doctor Neighbor')
 
     # Filter Options
-    doctor_neighbor_filter = st.sidebar.selectbox("Select Doctor Neighbor", ["All"] + filtered_df['Neighbourhood'].unique().tolist())
+    doctor_neighbor_filter = st.sidebar.selectbox("Select Doctor Neighbor", filtered_df['Neighbourhood'].unique().tolist())
 
     # Filter Data based on selected doctor neighbor
     if doctor_neighbor_filter != "All":
@@ -124,12 +125,14 @@ elif selected_analysis == "No Shows in a particular Doctor Neighbor":
 
     # Plot No Show Rates by Doctor Neighbor
     fig, ax = plt.subplots(figsize=(10, 6))
-    sns.barplot(x=no_show_percentage_by_doctor_neighbor.index, y=no_show_percentage_by_doctor_neighbor.values, ax=ax)
+    sns.barplot(x=no_show_percentage_by_doctor_neighbor.index, y=no_show_percentage_by_doctor_neighbor.values, ax=ax, palette=bar_palette)
     ax.set_xlabel('Doctor Neighbor')
     ax.set_ylabel('Percentage of No Shows')
     ax.set_title('No Show Percentage by Doctor Neighbor')
     ax.tick_params(axis='x', rotation=90)  # Rotate x-axis labels for better readability
+    ax.set_yticklabels(no_show_percentage_by_doctor_neighbor.index)
     st.pyplot(fig)
+
 
 elif selected_analysis == "Month, Date and Day wise Rate of No Show":
     st.subheader('Month, Date and Day wise Rate of No Show')
@@ -143,30 +146,33 @@ elif selected_analysis == "Month, Date and Day wise Rate of No Show":
     filtered_df['ScheduledDate'] = filtered_df['ScheduledDay'].dt.day
 
     # Calculate No Show rates by Scheduled Month
-    no_show_percentage_by_month = filtered_df.groupby(['ScheduledMonth', 'No-show']).size().unstack()
+    no_show_percentage_by_month = filtered_df.groupby(['ScheduledMonth', 'No-show']).size().unstack().fillna(0)
     no_show_percentage_by_month['No Show Percentage'] = (no_show_percentage_by_month['Yes'] / (no_show_percentage_by_month['Yes'] + no_show_percentage_by_month['No'])) * 100
 
     # Plot No Show Rates by Scheduled Month
     st.write("No Show Rates by Scheduled Month:")
     fig, ax = plt.subplots()
-    no_show_percentage_by_month['No Show Percentage'].plot(kind='line', marker='o', ax=ax)
+    no_show_percentage_by_month['No Show Percentage'].plot(kind='line', marker='o', ax=ax, palette=bar_palette)
     ax.set_xlabel('Scheduled Month')
     ax.set_ylabel('Percentage of No Shows')
     ax.set_title('No Show Rates by Scheduled Month')
+    ax.set_yticklabels(no_show_percentage_by_month['No Show Percentage'].index)
     st.pyplot(fig)
 
     # Calculate No Show rates by Scheduled Date
-    no_show_percentage_by_date = data.groupby(['ScheduledDate', 'No-show']).size().unstack()
+    no_show_percentage_by_date = filtered_df.groupby(['ScheduledDate', 'No-show']).size().unstack().fillna(0)
     no_show_percentage_by_date['No Show Percentage'] = (no_show_percentage_by_date['Yes'] / (no_show_percentage_by_date['Yes'] + no_show_percentage_by_date['No'])) * 100
 
     # Plot No Show Rates by Scheduled Date
     st.write("No Show Rates by Scheduled Date:")
     fig, ax = plt.subplots()
-    no_show_percentage_by_date['No Show Percentage'].plot(kind='line', marker='o', ax=ax)
+    no_show_percentage_by_date['No Show Percentage'].plot(kind='line', marker='o', ax=ax, palette=bar_palette)
     ax.set_xlabel('Scheduled Date')
     ax.set_ylabel('Percentage of No Shows')
     ax.set_title('No Show Rates by Scheduled Date')
+    ax.set_yticklabels(no_show_percentage_by_date['No Show Percentage'].index)
     st.pyplot(fig)
+
 
 elif selected_analysis == "No Show after sending SMS":
     st.subheader('No Show after sending SMS')
@@ -176,11 +182,13 @@ elif selected_analysis == "No Show after sending SMS":
 
     # Plot the relationship between SMS received and no-show
     fig, ax = plt.subplots(figsize=(8, 6))
-    sms_no_show_count.plot(kind='bar', ax=ax)
+    sms_no_show_count.plot(kind='bar', ax=ax, palette=bar_palette)
     ax.set_xlabel('No-show')
     ax.set_ylabel('Count of SMS Received')
     ax.set_title('No Show after sending SMS')
+    ax.set_yticklabels(sms_no_show_count.index)
     st.pyplot(fig)
+
 
 elif selected_analysis == "Rate of No Show after granting a scholarship":
     st.subheader('Rate of No Show after granting a scholarship')
@@ -190,11 +198,13 @@ elif selected_analysis == "Rate of No Show after granting a scholarship":
 
     # Plot the relationship between scholarship and no-show
     fig, ax = plt.subplots(figsize=(8, 6))
-    scholarship_no_show_count.plot(kind='bar', ax=ax)
+    scholarship_no_show_count.plot(kind='bar', ax=ax, palette=bar_palette)
     ax.set_xlabel('No-show')
     ax.set_ylabel('Count')
     ax.set_title('Rate of No Show after granting a scholarship')
+    ax.set_yticklabels(scholarship_no_show_count.index)
     st.pyplot(fig)
+
 
 elif selected_analysis == "Diseases and Their Relationship to No Shows":
     st.subheader('Diseases and Their Relationship to No Shows')
@@ -213,7 +223,7 @@ elif selected_analysis == "Diseases and Their Relationship to No Shows":
 
     # Plot the presence of diseases for each patient
     fig, ax = plt.subplots(figsize=(10, 6))
-    diseases_count_df.plot(kind='bar', stacked=True, ax=ax)
+    diseases_count_df.plot(kind='bar', stacked=True, ax=ax, palette=bar_palette)
     ax.set_xlabel('Patient ID')
     ax.set_ylabel('Count of No Show')
     ax.set_title('Diseases and Their Relationship to No Shows')
@@ -234,19 +244,30 @@ elif selected_analysis == "Diseases and Their Relationship to No Shows":
     st.write(f"Patients with Alcoholism: {alcoholism_count}")
     st.write(f"Patients with Handicap: {handicap_count}")
 
+
 elif selected_analysis == "Appointment day difference VS No Show":
     st.subheader('Appointment day difference VS No Show')
+
+    # Check the data types and missing values before calculating the difference
+    st.write(filtered_df[['AppointmentDay', 'ScheduledDay']].dtypes)
+    st.write(filtered_df[['AppointmentDay', 'ScheduledDay']].isnull().sum())
 
     # Calculate the difference between AppointmentDay and ScheduledDay
     filtered_df['Appointment_Scheduled_Difference'] = (filtered_df['AppointmentDay'] - filtered_df['ScheduledDay']).dt.days
 
+    # Define the mapping for y-tick labels
+    no_show_mapping = {'Yes': 'No Show', 'No': 'Showed Up'}
+
     # Plot the relationship between the difference and no-show
     fig, ax = plt.subplots(figsize=(10, 6))
-    sns.lineplot(data=filtered_df, x='Appointment_Scheduled_Difference', y='No-show', estimator=None, ax=ax)
+    sns.lineplot(data=filtered_df, x='Appointment_Scheduled_Difference', y='No-show', estimator=None, ax=ax, palette=bar_palette)
     ax.set_xlabel('Appointment Day - Scheduled Day Difference (Days)')
     ax.set_ylabel('No Show')
+    ax.set_yticks([0, 1])  # Set y-ticks to correspond to the 'No-show' values
+    ax.set_yticklabels([no_show_mapping[val] for val in ax.get_yticks()])
     ax.set_title('Appointment day difference VS No Show')
     st.pyplot(fig)
+
 
 else:
     st.error("Please select a valid analysis from the dropdown.")
