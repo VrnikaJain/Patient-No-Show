@@ -73,12 +73,12 @@ if selected_analysis == "Gender and No Show Rate":
 
     # Plot No Show Rates by Gender
     fig, ax = plt.subplots()
-    sns.barplot(y=no_show_percentage_by_gender.index, x=no_show_percentage_by_gender.values, ax=ax, palette=bar_palette)
+    sns.barplot( x=no_show_percentage_by_gender.values, y=no_show_percentage_by_gender.index, ax=ax, palette=bar_palette)
     
     ax.set_xlabel('Gender')
     ax.set_ylabel('Percentage of No Shows')
     ax.set_title('No Show Percentage by Gender')
-    ax.set_ylim(bottom=0)
+    ax.set_xlim(bottom=0)
     ax.set_xticklabels(no_show_percentage_by_gender.index, fontsize=8)
     
     # Adding percentage labels to the bars
@@ -114,7 +114,7 @@ elif selected_analysis == "Age and No Show Rate":
     if isinstance(no_show_percentage_by_age_group, pd.DataFrame):
         for i, (index, row) in enumerate(no_show_percentage_by_age_group.iterrows()):
             for j, value in enumerate(row):
-                ax.text(value, i, str(value), ha='left', va='center', fontsize=4, color='grey')
+                ax.text(value, i, str(value), ha='center', va='center', fontsize=4, color='grey')
     
     st.pyplot(fig)
 
@@ -149,7 +149,7 @@ elif selected_analysis == "No Shows in a particular Doctor Neighbor":
     
     # Adding percentage labels to the bars
     for i, v in enumerate(no_show_percentage_by_doctor_neighbor.values):
-        ax.text(v, i, f"{v:.2f}%", ha='right', va='center', fontsize=10, color='grey')
+        ax.text(v, i, f"{v:.2f}%", ha='center', va='center', fontsize=10, color='grey')
 
     st.pyplot(fig)
 
@@ -172,10 +172,12 @@ elif selected_analysis == "Month, Date and Day wise Rate of No Show":
     # Plot No Show Rates by Scheduled Month
     st.write("No Show Rates by Scheduled Month:")
     fig, ax = plt.subplots()
-    no_show_percentage_by_month['No Show Percentage'].plot(kind='line', marker='o', ax=ax, palette=bar_palette)
+    no_show_percentage_by_month['No Show Percentage'].plot(kind='line', marker='o', ax=ax, color=bar_palette)
     ax.set_xlabel('Scheduled Month')
     ax.set_ylabel('Percentage of No Shows')
     ax.set_title('No Show Rates by Scheduled Month')
+    ax.set_xticks(no_show_percentage_by_month.index)
+    ax.set_xticklabels(no_show_percentage_by_month.index)
     st.pyplot(fig)
 
     # Calculate No Show rates by Scheduled Date
@@ -189,6 +191,8 @@ elif selected_analysis == "Month, Date and Day wise Rate of No Show":
     ax.set_xlabel('Scheduled Date')
     ax.set_ylabel('Percentage of No Shows')
     ax.set_title('No Show Rates by Scheduled Date')
+    ax.set_xticks(no_show_percentage_by_date.index)
+    ax.set_xticklabels(no_show_percentage_by_date.index)
     st.pyplot(fig)
 
 
@@ -247,11 +251,11 @@ elif selected_analysis == "Diseases and Their Relationship to No Shows":
 
     # Plot the presence of diseases for each patient
     fig, ax = plt.subplots(figsize=(10, 6))
-    diseases_count_df.plot(kind='bar', stacked=True, ax=ax,  color=['#6495ED', '#98FB98'])
+    diseases_count_df.plot(kind='bar', stacked=True, ax=ax, color=['#6495ED', '#98FB98', '#FFA07A', '#9370DB'])
     ax.set_xlabel('Patient ID')
-    ax.set_ylabel('Count of No Show')
+    ax.set_ylabel('Count of Disease')
     ax.set_title('Diseases and Their Relationship to No Shows')
-    ax.set_yticklabels(diseases_count_df.index, rotation=45)
+    ax.legend(title='Disease')
     st.pyplot(fig)
 
     # Count the number of patients with each disease
@@ -273,9 +277,16 @@ elif selected_analysis == "Diseases and Their Relationship to No Shows":
 elif selected_analysis == "Appointment day difference VS No Show":
     st.subheader('Appointment day difference VS No Show')
 
+    # Convert 'AppointmentDay' and 'ScheduledDay' to datetime type
+    filtered_df['AppointmentDay'] = pd.to_datetime(filtered_df['AppointmentDay'])
+    filtered_df['ScheduledDay'] = pd.to_datetime(filtered_df['ScheduledDay'])
+
     # Check the data types and missing values before calculating the difference
     st.write(filtered_df[['AppointmentDay', 'ScheduledDay']].dtypes)
     st.write(filtered_df[['AppointmentDay', 'ScheduledDay']].isnull().sum())
+
+    # Drop rows with missing values in 'AppointmentDay' or 'ScheduledDay'
+    filtered_df.dropna(subset=['AppointmentDay', 'ScheduledDay'], inplace=True)
 
     # Calculate the difference between AppointmentDay and ScheduledDay
     filtered_df['Appointment_Scheduled_Difference'] = (filtered_df['AppointmentDay'] - filtered_df['ScheduledDay']).dt.days
