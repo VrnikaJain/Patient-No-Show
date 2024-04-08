@@ -3,3 +3,6 @@ pandas
 flask
 tensorflow
 joblib
+streamlit
+matplotlib
+seaborn 
