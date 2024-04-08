@@ -270,7 +270,7 @@ elif selected_analysis == "Diseases and Their Relationship to No Shows":
         ax.set_title('Distribution of ' + disease + ' and Their Relationship to No Shows')
         # Add values to the bars
         for i, count in enumerate(disease_count_df['Count']):
-            ax.text(i, 0, str(i), ha='center', va='bottom', fontsize=4, color='grey')
+            ax.text(count, 0, str(count), ha='center', va='bottom', fontsize=4, color='grey')
         
         st.pyplot(fig)
 
@@ -319,11 +319,12 @@ elif selected_analysis == "Appointment day difference VS No Show":
     ax.set_yticks([0, 1])  # Set y-ticks to correspond to the 'No-show' values
     ax.set_yticklabels([no_show_mapping.get(val, val) for val in ax.get_yticks()])  # Mapping y-ticks to labels
     ax.set_title('Appointment day difference VS No Show')
+     # Add total no-show count as text on the plot
+    ax.text(0.95, 0.95, f'Total No Shows: {total_no_show_count}', transform=ax.transAxes, ha='right', va='top', fontsize=4, color='black')
     # Add labels to specific points on the plot
     for i, row in filtered_df.iterrows():
         ax.text(row['Appointment_Scheduled_Difference'], 0 if row['No-show'] == 'No' else 1, row['No-show'], color='grey', ha='center', va='bottom', fontsize=4)
 
-    st.pyplot(fig)
 
 
 else:
