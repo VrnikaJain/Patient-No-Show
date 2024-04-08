@@ -23,8 +23,8 @@ analysis_options = [
     "Month, Date and Day wise Rate of No Show",
     "No Show after sending SMS",
     "Rate of No Show after granting a scholarship",
-    "Diseases and Their Relationship to No Shows",
-    "Appointment day difference VS No Show"
+    "Diseases and Their Relationship to No Shows"
+    #"Appointment day difference VS No Show"
 ]
 
 selected_analysis = st.sidebar.selectbox("Select Analysis", analysis_options)
@@ -46,8 +46,8 @@ elif selected_analysis == "Rate of No Show after granting a scholarship":
     pass  # No specific filter needed
 elif selected_analysis == "Diseases and Their Relationship to No Shows":
     pass  # No specific filter needed
-elif selected_analysis == "Appointment day difference VS No Show":
-    pass  # No specific filter needed
+'''elif selected_analysis == "Appointment day difference VS No Show":
+    pass  # No specific filter needed'''
 
 #Filter Data based on selected options
 filtered_df = data.copy()
@@ -289,7 +289,7 @@ elif selected_analysis == "Diseases and Their Relationship to No Shows":
     st.write(f"Patients with Alcoholism: {alcoholism_count}")
     st.write(f"Patients with Handicap: {handicap_count}")
 
-
+'''
 elif selected_analysis == "Appointment day difference VS No Show":
     st.subheader('Appointment day difference VS No Show')
 
@@ -327,7 +327,7 @@ elif selected_analysis == "Appointment day difference VS No Show":
     ax.text(0.95, 0.95, f'Total No Shows: {total_no_shows}', transform=ax.transAxes, ha='right', va='top', fontsize=4, color='red')
 
     st.pyplot(fig)
-
+'''
 
 else:
     st.error("Please select a valid analysis from the dropdown.")
