@@ -270,7 +270,7 @@ elif selected_analysis == "Diseases and Their Relationship to No Shows":
         ax.set_title('Distribution of ' + disease + ' and Their Relationship to No Shows')
         # Add values to the bars
         for i, count in enumerate(disease_count_df['Count']):
-            ax.text(count, 0, str(count), ha='center', va='bottom', fontsize=4, color='grey')
+            ax.text(i, 0, str(i), ha='center', va='bottom', fontsize=4, color='grey')
         
         st.pyplot(fig)
 
@@ -305,7 +305,7 @@ elif selected_analysis == "Appointment day difference VS No Show":
     filtered_df.dropna(subset=['AppointmentDay', 'ScheduledDay'], inplace=True)
 
     # Calculate the difference between AppointmentDay and ScheduledDay
-    filtered_df['Appointment_Scheduled_Difference'] = (filtered_df['ScheduledDay'] - filtered_df['AppointmentDay']).dt.days
+    filtered_df['Appointment_Scheduled_Difference'] = (filtered_df['AppointmentDay'] - filtered_df['ScheduledDay']).dt.days
 
     # Define the mapping for y-tick labels
     no_show_mapping = {'Yes': 'No Show', 'No': 'Showed Up'}
@@ -314,14 +314,14 @@ elif selected_analysis == "Appointment day difference VS No Show":
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.lineplot(data=filtered_df, x='Appointment_Scheduled_Difference', y='No-show', estimator=None, ax=ax, palette=bar_palette)
     
-    ax.set_xlabel('Scheduled Day - Appointment Day Difference (Days)')
+    ax.set_xlabel('Appointment Day - Scheduled Day Difference (Days)')
     ax.set_ylabel('No Show')
     ax.set_yticks([0, 1])  # Set y-ticks to correspond to the 'No-show' values
     ax.set_yticklabels([no_show_mapping.get(val, val) for val in ax.get_yticks()])  # Mapping y-ticks to labels
     ax.set_title('Appointment day difference VS No Show')
     # Add labels to specific points on the plot
     for i, row in filtered_df.iterrows():
-        ax.text(row['Appointment_Scheduled_Difference'], 0 if row['No-show'] == 'No' else 1, row['No-show'], color='black', ha='center', va='bottom')
+        ax.text(row['Appointment_Scheduled_Difference'], 0 if row['No-show'] == 'No' else 1, row['No-show'], color='grey', ha='center', va='bottom', fontsize=4)
 
     st.pyplot(fig)
 
