@@ -290,7 +290,10 @@ elif selected_analysis == "Diseases and Their Relationship to No Shows":
     st.write(f"Patients with Alcoholism: {alcoholism_count}")
     st.write(f"Patients with Handicap: {handicap_count}")
 
-'''
+
+else:
+    st.error("Please select a valid analysis from the dropdown.")
+"""
 elif selected_analysis == "Appointment day difference VS No Show":
     st.subheader('Appointment day difference VS No Show')
 
@@ -328,8 +331,5 @@ elif selected_analysis == "Appointment day difference VS No Show":
     ax.text(0.95, 0.95, f'Total No Shows: {total_no_shows}', transform=ax.transAxes, ha='right', va='top', fontsize=4, color='red')
 
     st.pyplot(fig)
-'''
-
-else:
-    st.error("Please select a valid analysis from the dropdown.")
+"""
 
