@@ -110,7 +110,7 @@ elif selected_analysis == "Age and No Show Rate":
     ax.set_xlabel('Age Group')
     ax.set_ylabel('No Shows Percentage')
     ax.set_title('No Show Percentage by Age Group')
-    ax.set_xlim(left=0)
+    #ax.set_xlim(left=0)
     ax.set_ylim(bottom=0)
     ax.set_xticklabels(no_show_percentage_by_age_group.index, rotation=90, fontsize=4)
     ax.set_yticklabels([]) 
@@ -119,8 +119,8 @@ elif selected_analysis == "Age and No Show Rate":
     for i, value in enumerate(no_show_percentage_by_age_group.values):
         bar_height = ax.patches[i].get_height()
         text_x = ax.patches[i].get_x() + ax.patches[i].get_width() / 2
-        text_y = ax.patches[i].get_y() + bar_height / 2
-        ax.text(text_x, text_y, f"{v:.2f}%", ha='center', va='center', fontsize=4, color='grey')
+        text_y = bar_height + 0.5
+        ax.text(text_x, text_y, f"{v:.2f}%", ha='center', va='bottom', fontsize=4, color='grey')
         
     st.pyplot(fig)
 
@@ -267,6 +267,10 @@ elif selected_analysis == "Diseases and Their Relationship to No Shows":
         ax.set_xlabel('Count of ' + disease)
         ax.set_ylabel('Frequency')
         ax.set_title('Distribution of ' + disease + ' and Their Relationship to No Shows')
+        # Add values to the bars
+        for i, count in enumerate(disease_count_df['Count']):
+            ax.text(count, 0, str(count), ha='center', va='bottom', fontsize=4, color='grey')
+        
         st.pyplot(fig)
 
     # Count the number of patients with each disease
