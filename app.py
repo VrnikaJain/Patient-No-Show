@@ -119,7 +119,7 @@ elif selected_analysis == "Age and No Show Rate":
             bar_height = ax.patches[i].get_height()
             text_x = ax.patches[i].get_x() + ax.patches[i].get_width() / 2
             text_y = ax.patches[i].get_y() + bar_height / 2
-            ax.text(text_x, text_y, f"{v:.2f}%", ha='center', va='center', fontsize=4, color='grey')
+            ax.text(text_x, text_y, f"{value:.2f}%", ha='center', va='center', fontsize=4, color='grey')
         else:
             st.warning("Not enough patches to display all percentage values.")
         
