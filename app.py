@@ -320,9 +320,14 @@ elif selected_analysis == "Appointment day difference VS No Show":
     ax.set_yticklabels([no_show_mapping.get(val, val) for val in ax.get_yticks()])  # Mapping y-ticks to labels
     ax.set_title('Appointment day difference VS No Show')
     # Add labels to specific points on the plot
-    for i, row in filtered_df.iterrows():
-        ax.text(row['Appointment_Scheduled_Difference'], 0 if row['No-show'] == 'No' else 1, row['No-show'], color='grey', ha='center', va='bottom', fontsize=4)
-    
+    # Check if the columns exist in the DataFrame
+    if 'Appointment_Scheduled_Difference' in filtered_df.columns and 'No-show' in filtered_df.columns:
+        # Iterate over the rows and print the values of the columns
+        for i, row in filtered_df.iterrows():
+            print(row['Appointment_Scheduled_Difference'], row['No-show'])
+    else:
+        print("One or both of the required columns are missing in the DataFrame.")
+
 
 else:
     st.error("Please select a valid analysis from the dropdown.")
