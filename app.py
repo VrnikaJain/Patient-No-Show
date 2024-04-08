@@ -110,17 +110,18 @@ elif selected_analysis == "Age and No Show Rate":
     ax.set_xlabel('Age Group')
     ax.set_ylabel('No Shows Percentage')
     ax.set_title('No Show Percentage by Age Group')
-    #ax.set_xlim(left=0)
-    ax.set_ylim(bottom=0)
     ax.set_xticklabels(no_show_percentage_by_age_group.index, rotation=90, fontsize=4)
     ax.set_yticklabels([]) 
     
     # Display percentage values on the bars with proper alignment
     for i, value in enumerate(no_show_percentage_by_age_group.values):
-        bar_height = ax.patches[i].get_height()
-        text_x = ax.patches[i].get_x() + ax.patches[i].get_width() / 2
-        text_y = bar_height + 0.5
-        ax.text(text_x, text_y, f"{value:.2f}%", ha='center', va='bottom', fontsize=4, color='grey')
+        if i < len(ax.patches):
+            bar_height = ax.patches[i].get_height()
+            text_x = ax.patches[i].get_x() + ax.patches[i].get_width() / 2
+            text_y = ax.patches[i].get_y() + bar_height / 2
+            ax.text(text_x, text_y, f"{value:.2f}%", ha='center', va='center', fontsize=4, color='grey')
+        else:
+            st.warning("Not enough patches to display all percentage values.")
         
     st.pyplot(fig)
 
@@ -217,7 +218,7 @@ elif selected_analysis == "No Show after sending SMS":
     sms_no_show_count.plot(kind='bar', ax=ax,  color=['#6495ED', '#98FB98'])
     for i, (index, row) in enumerate(sms_no_show_count.iterrows()):
         for j, value in enumerate(row):
-            ax.text(i + (j - 0.1), str(value), ha='center', va='bottom', fontsize=8, color='grey')
+            ax.text(i ,value + 5, str(value), ha='center', va='bottom', fontsize=8, color='grey')
     ax.set_xlabel('No-show')
     #ax.set_ylabel('Count of SMS Received')
     ax.set_title('No Show after sending SMS')
@@ -236,7 +237,7 @@ elif selected_analysis == "Rate of No Show after granting a scholarship":
     scholarship_no_show_count.plot(kind='bar', ax=ax,  color=['#6495ED', '#98FB98'])
     for i, (index, row) in enumerate(scholarship_no_show_count.iterrows()):
         for j, value in enumerate(row):
-            ax.text(i + (j - 0.1), str(value), ha='center', va='bottom', fontsize=8, color='grey')
+            ax.text(i ,value + 5, str(value), ha='center', va='bottom', fontsize=8, color='grey')
     ax.set_xlabel('No-show')
     ax.set_ylabel('Count')
     ax.set_title('Rate of No Show after granting a scholarship')
@@ -316,7 +317,7 @@ elif selected_analysis == "Appointment day difference VS No Show":
     ax.set_xlabel('Scheduled Day - Appointment Day Difference (Days)')
     ax.set_ylabel('No Show')
     ax.set_yticks([0, 1])  # Set y-ticks to correspond to the 'No-show' values
-    ax.set_yticklabels([no_show_mapping[val] for val in ax.get_yticks()])
+    ax.set_yticklabels([no_show_mapping.get(val, val) for val in ax.get_yticks()])  # Mapping y-ticks to labels
     ax.set_title('Appointment day difference VS No Show')
     # Add labels to specific points on the plot
     for i, row in filtered_df.iterrows():
