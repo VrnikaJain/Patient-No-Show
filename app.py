@@ -321,6 +321,7 @@ elif selected_analysis == "Appointment day difference VS No Show":
     ax.set_title('Appointment day difference VS No Show')
     # Add total no-show count as text on the plot
     # Add total no-show count as text on the plot
+    # Add total no-show count as text on the plot
     ax.text(0.95, 0.95, f'Total No Shows: {total_no_show_count}', transform=ax.transAxes, ha='right', va='top', fontsize=4, color='grey')
     # Add labels to specific points on the plot
     for i, row in filtered_df.iterrows():
