@@ -1,4 +1,5 @@
-streamlit
+scikit-learn
 pandas
-matplotlib
-seaborn
+flask
+tensorflow
+joblib
