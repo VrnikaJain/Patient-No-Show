@@ -308,9 +308,8 @@ elif selected_analysis == "Appointment day difference VS No Show":
     filtered_df['Appointment_Scheduled_Difference'] = (filtered_df['AppointmentDay'] - filtered_df['ScheduledDay']).dt.days
 
     # Define the mapping for y-tick labels
-    # Calculate total number of no-shows
-    total_no_shows = filtered_df['No-show'].eq('Yes').sum()
-    
+    no_show_mapping = {'Yes': 'No Show', 'No': 'Showed Up'}
+
     # Plot the relationship between the difference and no-show
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.lineplot(data=filtered_df, x='Appointment_Scheduled_Difference', y='No-show', estimator=None, ax=ax, palette=bar_palette)
@@ -318,17 +317,12 @@ elif selected_analysis == "Appointment day difference VS No Show":
     ax.set_xlabel('Appointment Day - Scheduled Day Difference (Days)')
     ax.set_ylabel('No Show')
     ax.set_yticks([0, 1])  # Set y-ticks to correspond to the 'No-show' values
-    ax.set_yticklabels([no_show_mapping.get(val, val) for val in ax.get_yticks()])
+    ax.set_yticklabels([no_show_mapping[val] for val in ax.get_yticks()])
     ax.set_title('Appointment day difference VS No Show')
-    
     # Add labels to specific points on the plot
     for i, row in filtered_df.iterrows():
-        ax.text(row['Appointment_Scheduled_Difference'], 0 if row['No-show'] == 'No' else 1, row['No-show'], color='grey', ha='center', va='bottom')
-    
-    # Calculate and add text for total no-shows
-    total_no_shows = filtered_df['No-show'].value_counts().get('Yes', 0)
-    ax.text(0.95, 0.95, f'Total No Shows: {total_no_shows}', transform=ax.transAxes, ha='right', va='top', fontsize=8, color='red')
-    
+        ax.text(row['Appointment_Scheduled_Difference'], 0 if row['No-show'] == 'No' else 1, row['No-show'], color='black', ha='center', va='bottom', fontsize=4)
+
     st.pyplot(fig)
 
 
