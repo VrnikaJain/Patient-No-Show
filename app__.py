@@ -24,8 +24,9 @@ analysis_options = [
     "No Show after sending SMS",
     "Rate of No Show after granting a scholarship",
     "Diseases and Their Relationship to No Shows"
-    #"Appointment day difference VS No Show"
 ]
+    #"Appointment day difference VS No Show"
+
 
 selected_analysis = st.sidebar.selectbox("Select Analysis", analysis_options)
 
