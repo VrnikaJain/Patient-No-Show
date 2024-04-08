@@ -326,7 +326,7 @@ elif selected_analysis == "Appointment day difference VS No Show":
         ax.text(row['Appointment_Scheduled_Difference'], 0 if row['No-show'] == 'No' else 1, row['No-show'], color='black', ha='center', va='bottom')
     
     # Add text for total no-shows
-    #ax.text(0.95, 0.95, f'Total No Shows: {total_no_shows}', transform=ax.transAxes, ha='right', va='top', fontsize=8, color='red')
+    ax.text(0.95, 0.95, f'Total No Shows: {total_no_shows}', transform=ax.transAxes, ha='right', va='top', fontsize=8, color='red')
     
     st.pyplot(fig)
 
