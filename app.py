@@ -74,7 +74,7 @@ if selected_analysis == "Gender and No Show Rate":
 
     # Plot No Show Rates by Gender
     fig, ax = plt.subplots()
-    sns.barplot( x=no_show_percentage_by_gender.values, y=no_show_percentage_by_gender.index, ax=ax, palette=bar_palette)
+    sns.barplot( y=no_show_percentage_by_gender.values, x=no_show_percentage_by_gender.index, ax=ax, palette=bar_palette)
     
     ax.set_xlabel('Gender')
     ax.set_ylabel('Percentage of No Shows')
@@ -86,7 +86,7 @@ if selected_analysis == "Gender and No Show Rate":
         bar_height = ax.patches[i].get_height()
         text_x = ax.patches[i].get_x() + ax.patches[i].get_width() / 2
         text_y = ax.patches[i].get_y() + bar_height / 2
-        ax.text(text_x, text_y, f"{v:.2f}%", ha='center', va='center', fontsize=4, color='grey')
+        ax.text(text_x, text_y, f"{v:.2f}%", ha='center', va='center', fontsize=12, color='grey')
 
     st.pyplot(fig)
 
@@ -111,7 +111,7 @@ elif selected_analysis == "Age and No Show Rate":
     ax.set_ylabel('No Shows Percentage')
     ax.set_title('No Show Percentage by Age Group')
     ax.set_xlim(left=0)
-    ax.set_ylim(left=0)
+    ax.set_ylim(bottom=0)
     ax.set_xticklabels(no_show_percentage_by_age_group.index, rotation=90, fontsize=4)
     ax.set_yticklabels([]) 
     
@@ -155,7 +155,7 @@ elif selected_analysis == "No Shows in a particular Doctor Neighbor":
     
     # Adding percentage labels to the bars
     for i, v in enumerate(no_show_percentage_by_doctor_neighbor.values):
-        ax.text(v, i, f"{v:.2f}%", ha='center', va='center', fontsize=10, color='grey')
+        ax.text(v, i, f"{v:.2f}%", ha='center', va='center', fontsize=12, color='grey')
 
     st.pyplot(fig)
 
@@ -179,7 +179,7 @@ elif selected_analysis == "Month, Date and Day wise Rate of No Show":
     st.write("No Show Rates by Scheduled Month:")
     fig, ax = plt.subplots()
     no_show_percentage_by_month['No Show Percentage'].plot(kind='line', marker='o', ax=ax, color=bar_palette2)
-    ax.set_xlabel('Scheduled Month')
+    ax.set_xlabel('Scheduled Month', labelpad=8)
     ax.set_ylabel('Percentage of No Shows')
     ax.set_title('No Show Rates by Scheduled Month')
     ax.set_xticks(no_show_percentage_by_month.index)
@@ -217,7 +217,7 @@ elif selected_analysis == "No Show after sending SMS":
     sms_no_show_count.plot(kind='bar', ax=ax,  color=['#6495ED', '#98FB98'])
     for i, (index, row) in enumerate(sms_no_show_count.iterrows()):
         for j, value in enumerate(row):
-            ax.text(i, value, str(value), ha='left', va='center', fontsize=6, color='grey')
+            ax.text(i, value, str(value), ha='center', va='bottom', fontsize=8, color='grey')
     ax.set_xlabel('No-show')
     #ax.set_ylabel('Count of SMS Received')
     ax.set_title('No Show after sending SMS')
@@ -236,7 +236,7 @@ elif selected_analysis == "Rate of No Show after granting a scholarship":
     scholarship_no_show_count.plot(kind='bar', ax=ax,  color=['#6495ED', '#98FB98'])
     for i, (index, row) in enumerate(scholarship_no_show_count.iterrows()):
         for j, value in enumerate(row):
-            ax.text(i, value, str(value), ha='left', va='center', fontsize=6, color='grey')
+            ax.text(i, value, str(value), ha='center', va='bottom', fontsize=8, color='grey')
     ax.set_xlabel('No-show')
     ax.set_ylabel('Count')
     ax.set_title('Rate of No Show after granting a scholarship')
@@ -248,26 +248,26 @@ elif selected_analysis == "Diseases and Their Relationship to No Shows":
     st.subheader('Diseases and Their Relationship to No Shows')
 
     # Create a dataframe to store the presence of diseases for each patient
-    diseases_df = filtered_df[['PatientId', 'Hipertension', 'Diabetes', 'Alcoholism', 'Handcap']]
-    
-    # Melt the dataframe to have a single column for disease type and another column for disease presence
-    diseases_df_melted = diseases_df.melt(id_vars=['PatientId'], var_name='Disease', value_name='Presence')
+    diseases = ['Hipertension', 'Diabetes', 'Alcoholism', 'Handcap']
 
-    # Filter out rows where disease presence is True
-    diseases_present_df = diseases_df_melted[diseases_df_melted['Presence'] == 1]
+    # Create a separate plot for each disease
+    for disease in diseases:
+        # Create a dataframe to store the presence of the current disease for each patient
+        disease_df = filtered_df[['PatientId', disease]]
+        
+        # Filter out rows where the disease presence is True
+        disease_present_df = disease_df[disease_df[disease] == 1]
 
-    # Count the number of occurrences of each disease for each patient
-    diseases_count_df = diseases_present_df.groupby(['PatientId', 'Disease']).size().unstack(fill_value=0)
+        # Count the number of occurrences of the disease for each patient
+        disease_count_df = disease_present_df.groupby(['PatientId']).size().reset_index(name='Count')
 
-    # Plot the presence of diseases for each patient
-    fig, ax = plt.subplots(figsize=(10, 6))
-    diseases_count_df.plot(kind='bar', stacked=True, ax=ax, color=['#6495ED', '#98FB98', '#FFA07A', '#9370DB'])
-    ax.set_xlabel('Patient ID')
-    ax.set_ylabel('Count of Disease')
-    ax.set_title('Diseases and Their Relationship to No Shows')
-    ax.legend(title='Disease')
-    ax.set_xticklabels([])
-    st.pyplot(fig)
+        # Plot the presence of the disease for each patient
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.histplot(data=disease_count_df, x='Count', ax=ax, kde=True, color='#6495ED')
+        ax.set_xlabel('Count of ' + disease)
+        ax.set_ylabel('Frequency')
+        ax.set_title('Distribution of ' + disease + ' and Their Relationship to No Shows')
+        st.pyplot(fig)
 
     # Count the number of patients with each disease
     diabetes_count = filtered_df['Diabetes'].sum()
