@@ -105,7 +105,7 @@ elif selected_analysis == "Age and No Show Rate":
 
     # Plot No Show Rates by Age Group
     fig, ax = plt.subplots()
-    sns.barplot(x=no_show_percentage_by_age_group.values, y=no_show_percentage_by_age_group.index, ax=ax, palette=bar_palette)
+    sns.barplot(y=no_show_percentage_by_age_group.values, x=no_show_percentage_by_age_group.index, ax=ax, palette=bar_palette)
     
     ax.set_xlabel('Age Group')
     ax.set_ylabel('No Shows Percentage')
@@ -218,7 +218,7 @@ elif selected_analysis == "No Show after sending SMS":
     sms_no_show_count.plot(kind='bar', ax=ax,  color=['#6495ED', '#98FB98'])
     for i, (index, row) in enumerate(sms_no_show_count.iterrows()):
         for j, value in enumerate(row):
-            ax.text(i , str(value), ha='center', va='bottom', fontsize=8, color='grey')
+            ax.text(i + j * 0.2, value , str(value), ha='center', va='bottom', fontsize=8, color='grey')
     ax.set_xlabel('No-show')
     #ax.set_ylabel('Count of SMS Received')
     ax.set_title('No Show after sending SMS')
@@ -237,7 +237,7 @@ elif selected_analysis == "Rate of No Show after granting a scholarship":
     scholarship_no_show_count.plot(kind='bar', ax=ax,  color=['#6495ED', '#98FB98'])
     for i, (index, row) in enumerate(scholarship_no_show_count.iterrows()):
         for j, value in enumerate(row):
-            ax.text(i , str(value), ha='center', va='bottom', fontsize=8, color='grey')
+            ax.text(i + j * 0.2, value , str(value), ha='center', va='bottom', fontsize=8, color='grey')
     ax.set_xlabel('No-show')
     ax.set_ylabel('Count')
     ax.set_title('Rate of No Show after granting a scholarship')
