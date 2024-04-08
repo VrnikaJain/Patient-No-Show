@@ -25,8 +25,6 @@ analysis_options = [
     "Rate of No Show after granting a scholarship",
     "Diseases and Their Relationship to No Shows"
 ]
-    #"Appointment day difference VS No Show"
-
 
 selected_analysis = st.sidebar.selectbox("Select Analysis", analysis_options)
 
@@ -47,8 +45,6 @@ elif selected_analysis == "Rate of No Show after granting a scholarship":
     pass  # No specific filter needed
 elif selected_analysis == "Diseases and Their Relationship to No Shows":
     pass  # No specific filter needed
-'''elif selected_analysis == "Appointment day difference VS No Show":
-    pass  # No specific filter needed'''
 
 #Filter Data based on selected options
 filtered_df = data.copy()
@@ -293,43 +289,4 @@ elif selected_analysis == "Diseases and Their Relationship to No Shows":
 
 else:
     st.error("Please select a valid analysis from the dropdown.")
-"""
-elif selected_analysis == "Appointment day difference VS No Show":
-    st.subheader('Appointment day difference VS No Show')
-
-    # Convert 'AppointmentDay' and 'ScheduledDay' to datetime type
-    filtered_df['AppointmentDay'] = pd.to_datetime(filtered_df['AppointmentDay'])
-    filtered_df['ScheduledDay'] = pd.to_datetime(filtered_df['ScheduledDay'])
-
-    # Check the data types and missing values before calculating the difference
-    st.write(filtered_df[['AppointmentDay', 'ScheduledDay']].dtypes)
-    st.write(filtered_df[['AppointmentDay', 'ScheduledDay']].isnull().sum())
-
-    # Drop rows with missing values in 'AppointmentDay' or 'ScheduledDay'
-    filtered_df.dropna(subset=['AppointmentDay', 'ScheduledDay'], inplace=True)
-
-    # Calculate the difference between AppointmentDay and ScheduledDay
-    filtered_df['Appointment_Scheduled_Difference'] = (filtered_df['AppointmentDay'] - filtered_df['ScheduledDay']).dt.days
-
-    # Define the mapping for y-tick labels
-    no_show_mapping = {'Yes': 'No Show', 'No': 'Showed Up'}
-
-    # Plot the relationship between the difference and no-show
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.lineplot(data=filtered_df, x='Appointment_Scheduled_Difference', y='No-show', estimator=None, ax=ax, palette=bar_palette)
-    
-    ax.set_xlabel('Appointment Day - Scheduled Day Difference (Days)')
-    ax.set_ylabel('No Show')
-    ax.set_yticks([0, 1])  # Set y-ticks to correspond to the 'No-show' values
-    ax.set_yticklabels(['Showed Up', 'No Show'])  # Set y-tick labels directly
-    ax.set_title('Appointment day difference VS No Show')
-    # Add labels to specific points on the plot
-    for i, row in filtered_df.iterrows():
-        ax.text(row['Appointment_Scheduled_Difference'], 0 if row['No-show'] == 'No' else 1, row['No-show'], color='black', ha='center', va='bottom', fontsize=4)
-    # Calculate and add text for total no-shows
-    total_no_shows = (filtered_df['No-show'] == 'Yes').sum()
-    ax.text(0.95, 0.95, f'Total No Shows: {total_no_shows}', transform=ax.transAxes, ha='right', va='top', fontsize=4, color='red')
-
-    st.pyplot(fig)
-"""
 
