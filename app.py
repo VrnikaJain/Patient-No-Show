@@ -217,7 +217,7 @@ elif selected_analysis == "No Show after sending SMS":
     sms_no_show_count.plot(kind='bar', ax=ax,  color=['#6495ED', '#98FB98'])
     for i, (index, row) in enumerate(sms_no_show_count.iterrows()):
         for j, value in enumerate(row):
-            ax.text(i + (j - 0.1), value + 5, str(value), ha='center', va='bottom', fontsize=8, color='grey')
+            ax.text(i + (j - 0.1), str(value), ha='center', va='bottom', fontsize=8, color='grey')
     ax.set_xlabel('No-show')
     #ax.set_ylabel('Count of SMS Received')
     ax.set_title('No Show after sending SMS')
@@ -236,7 +236,7 @@ elif selected_analysis == "Rate of No Show after granting a scholarship":
     scholarship_no_show_count.plot(kind='bar', ax=ax,  color=['#6495ED', '#98FB98'])
     for i, (index, row) in enumerate(scholarship_no_show_count.iterrows()):
         for j, value in enumerate(row):
-            ax.text(i + (j - 0.1), value + 5, str(value), ha='center', va='bottom', fontsize=8, color='grey')
+            ax.text(i + (j - 0.1), str(value), ha='center', va='bottom', fontsize=8, color='grey')
     ax.set_xlabel('No-show')
     ax.set_ylabel('Count')
     ax.set_title('Rate of No Show after granting a scholarship')
@@ -304,7 +304,7 @@ elif selected_analysis == "Appointment day difference VS No Show":
     filtered_df.dropna(subset=['AppointmentDay', 'ScheduledDay'], inplace=True)
 
     # Calculate the difference between AppointmentDay and ScheduledDay
-    filtered_df['Appointment_Scheduled_Difference'] = (filtered_df['AppointmentDay'] - filtered_df['ScheduledDay']).dt.days
+    filtered_df['Appointment_Scheduled_Difference'] = (filtered_df['ScheduledDay'] - filtered_df['AppointmentDay']).dt.days
 
     # Define the mapping for y-tick labels
     no_show_mapping = {'Yes': 'No Show', 'No': 'Showed Up'}
@@ -313,7 +313,7 @@ elif selected_analysis == "Appointment day difference VS No Show":
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.lineplot(data=filtered_df, x='Appointment_Scheduled_Difference', y='No-show', estimator=None, ax=ax, palette=bar_palette)
     
-    ax.set_xlabel('Appointment Day - Scheduled Day Difference (Days)')
+    ax.set_xlabel('Scheduled Day - Appointment Day Difference (Days)')
     ax.set_ylabel('No Show')
     ax.set_yticks([0, 1])  # Set y-ticks to correspond to the 'No-show' values
     ax.set_yticklabels([no_show_mapping[val] for val in ax.get_yticks()])
