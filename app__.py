@@ -83,7 +83,7 @@ if selected_analysis == "Gender and No Show Rate":
         bar_height = ax.patches[i].get_height()
         text_x = ax.patches[i].get_x() + ax.patches[i].get_width() / 2
         text_y = ax.patches[i].get_y() + bar_height / 2
-        ax.text(text_x, text_y, f"{v:.2f}%", ha='center', va='center', fontsize=12, color='grey')
+        ax.text(text_x, text_y, f"{v:.2f}%", ha='center', va='center', fontsize=12, color='black')
 
     st.pyplot(fig)
 
@@ -102,7 +102,7 @@ elif selected_analysis == "Age and No Show Rate":
 
     # Plot No Show Rates by Age Group
     fig, ax = plt.subplots()
-    sns.barplot(y=no_show_percentage_by_age_group.values, x=no_show_percentage_by_age_group.index, ax=ax, palette=bar_palette)
+    sns.barplot(y=no_show_percentage_by_age_group.values, x=no_show_percentage_by_age_group.index, ax=ax, color="#BCF06A")
     
     ax.set_xlabel('Age Group')
     ax.set_ylabel('No Shows Percentage')
@@ -115,8 +115,8 @@ elif selected_analysis == "Age and No Show Rate":
         if i < len(ax.patches):
             bar_height = ax.patches[i].get_height()
             text_x = ax.patches[i].get_x() + ax.patches[i].get_width() / 2
-            text_y = ax.patches[i].get_y() + bar_height / 2
-            ax.text(text_x, text_y, f"{value:.2f}%", ha='center', va='center', fontsize=4, color='grey')
+            text_y = ax.patches[i].get_height()
+            ax.text(text_x, text_y, f"{value:.2f}%", ha='center', va='bottom', fontsize=4, color='black')
         else:
             st.warning("Not enough patches to display all percentage values.")
         
@@ -153,7 +153,7 @@ elif selected_analysis == "No Shows in a particular Doctor Neighbor":
     
     # Adding percentage labels to the bars
     for i, v in enumerate(no_show_percentage_by_doctor_neighbor.values):
-        ax.text(v, i, f"{v:.2f}%", ha='center', va='center', fontsize=12, color='grey')
+        ax.text(v, i, f"{v:.2f}%", ha='center', va='center', fontsize=12, color='black')
 
     st.pyplot(fig)
 
@@ -210,16 +210,24 @@ elif selected_analysis == "No Show after sending SMS":
     # Count the occurrences of SMS received and no-shows
     sms_no_show_count = filtered_df.groupby(['SMS_received', 'No-show']).size().unstack(fill_value=0)
 
+    # Calculate percentages
+    total_counts = sms_no_show_count.sum(axis=1)
+    sms_no_show_percentage = sms_no_show_count.div(total_counts, axis=0) * 100
+
     # Plot the relationship between SMS received and no-show
     fig, ax = plt.subplots(figsize=(8, 6))
-    sms_no_show_count.plot(kind='bar', ax=ax,  color=['#6495ED', '#98FB98'])
-    for i, (index, row) in enumerate(sms_no_show_count.iterrows()):
+    sms_no_show_percentage.plot(kind='bar', ax=ax,  color=['#6495ED', '#98FB98'])
+    
+    # Display percentage values on top of the bars with proper alignment
+    for i, (index, row) in enumerate(sms_no_show_percentage.iterrows()):
         for j, value in enumerate(row):
-            ax.text(i + j * 0.2, value , str(value), ha='center', va='bottom', fontsize=8, color='grey')
+            ax.text(i + j * 0.2, value , f"{value:.2f}%", ha='center', va='bottom', fontsize=8, color='black')
+            
     ax.set_xlabel('No-show')
     #ax.set_ylabel('Count of SMS Received')
     ax.set_title('No Show after sending SMS')
     ax.set_yticklabels(sms_no_show_count.index)
+    ax.set_xticklabels(['No', 'Yes'], rotation=0)
     st.pyplot(fig)
 
 
@@ -229,15 +237,22 @@ elif selected_analysis == "Rate of No Show after granting a scholarship":
     # Count the occurrences of scholarship and no-shows
     scholarship_no_show_count = filtered_df.groupby(['Scholarship', 'No-show']).size().unstack(fill_value=0)
 
+    # Calculate percentages
+    total_counts = scholarship_no_show_count.sum(axis=1)
+    scholarship_no_show_percentage = scholarship_no_show_count.div(total_counts, axis=0) * 100
+
     # Plot the relationship between scholarship and no-show
     fig, ax = plt.subplots(figsize=(8, 6))
-    scholarship_no_show_count.plot(kind='bar', ax=ax,  color=['#6495ED', '#98FB98'])
+    scholarship_no_show_percentage.plot(kind='bar', ax=ax,  color=['#6495ED', '#98FB98'])
+    
+    # Plot the relationship between scholarship and no-show
     for i, (index, row) in enumerate(scholarship_no_show_count.iterrows()):
         for j, value in enumerate(row):
-            ax.text(i + j * 0.2, value , str(value), ha='center', va='bottom', fontsize=8, color='grey')
+            ax.text(i + j * 0.2, value , str(value), ha='center', va='bottom', fontsize=8, color='black')
     ax.set_xlabel('No-show')
-    ax.set_ylabel('Count')
+    ax.set_ylabel('Percentage of No-Show')
     ax.set_title('Rate of No Show after granting a scholarship')
+    ax.set_xticklabels(['No Scholarship', 'Scholarship'], rotation=0) 
     ax.set_yticklabels(scholarship_no_show_count.index)
     st.pyplot(fig)
 
@@ -267,7 +282,7 @@ elif selected_analysis == "Diseases and Their Relationship to No Shows":
         ax.set_title('Distribution of ' + disease + ' and Their Relationship to No Shows')
         # Add values to the bars
         for i, count in enumerate(disease_count_df['Count']):
-            ax.text(count, 0, str(count), ha='center', va='bottom', fontsize=4, color='grey')
+            ax.text(count, 0, str(count), ha='center', va='bottom', fontsize=4, color='black')
         
         st.pyplot(fig)
 
