@@ -245,10 +245,11 @@ elif selected_analysis == "Rate of No Show after granting a scholarship":
     fig, ax = plt.subplots(figsize=(8, 6))
     scholarship_no_show_percentage.plot(kind='bar', ax=ax,  color=['#6495ED', '#98FB98'])
     
-    # Plot the relationship between scholarship and no-show
-    for i, (index, row) in enumerate(scholarship_no_show_count.iterrows()):
+    # Display percentage values on top of the bars with proper alignment
+    for i, (index, row) in enumerate(scholarship_no_show_percentage.iterrows()):
         for j, value in enumerate(row):
-            ax.text(i + j * 0.2, value , str(value), ha='center', va='bottom', fontsize=8, color='black')
+            ax.text(i + j * 0.2, value , f"{value:.2f}%", ha='center', va='bottom', fontsize=8, color='black')
+
     ax.set_xlabel('No-show')
     ax.set_ylabel('Percentage of No-Show')
     ax.set_title('Rate of No Show after granting a scholarship')
